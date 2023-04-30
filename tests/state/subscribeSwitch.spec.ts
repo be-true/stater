@@ -1,27 +1,27 @@
-import { State } from '../../src';
+import { State } from "../../src";
 
-describe('State.subscribeSwitch()', () => {
-  it('Обработка событий отключается при onChange()', () => {
-    const data = { name: 'Евгений', age: 18 };
-    const state = new State<typeof data>(data).source('any_source');
+describe("State.subscribeSwitch()", () => {
+  it("Обработка событий отключается при onChange()", () => {
+    const data = { name: "Евгений", age: 18 };
+    const state = new State<typeof data>(data).source("any_source");
     let doCount = 0;
 
-    state.onChange('name', { do: () => doCount++ });
+    state.onChange("name", { do: () => doCount++ });
 
     // Отключаем. Нет вызова
     state.subscribeSwitch(false);
-    state.set('name', 'Дмитрий');
+    state.set("name", "Дмитрий");
     expect(doCount).toEqual(0);
 
     // Включаем. Есть вызов
     state.subscribeSwitch(true);
-    state.set('name', 'Андрей');
+    state.set("name", "Андрей");
     expect(doCount).toEqual(1);
   });
 
-  it('Обработка событий отключается при onCreate()', () => {
-    const data = { name: 'Евгений', age: 18 };
-    const state = new State<typeof data>(data).source('any_source');
+  it("Обработка событий отключается при onCreate()", () => {
+    const data = { name: "Евгений", age: 18 };
+    const state = new State<typeof data>(data).source("any_source");
     let doCount = 0;
 
     state.onCreate({ do: () => doCount++ });
@@ -37,9 +37,9 @@ describe('State.subscribeSwitch()', () => {
     expect(doCount).toEqual(1);
   });
 
-  it('Обработка событий отключается при onDelete()', () => {
-    const data = { name: 'Евгений', age: 18 };
-    const state = new State<typeof data>(data).source('any_source');
+  it("Обработка событий отключается при onDelete()", () => {
+    const data = { name: "Евгений", age: 18 };
+    const state = new State<typeof data>(data).source("any_source");
     let doCount = 0;
 
     state.onDelete({ do: () => doCount++ });
@@ -55,8 +55,8 @@ describe('State.subscribeSwitch()', () => {
     expect(doCount).toEqual(1);
   });
 
-  it('Получение состояния переключателя подписок', () => {
-    const data = { name: 'User', age: 90 };
+  it("Получение состояния переключателя подписок", () => {
+    const data = { name: "User", age: 90 };
     const state = new State<typeof data>(data);
 
     state.asNew();

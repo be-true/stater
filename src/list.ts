@@ -1,5 +1,5 @@
-import { makeCallback } from './functions/makeCallback';
-import { State } from './state';
+import { makeCallback } from "./functions/makeCallback";
+import { State } from "./state";
 import {
   IState,
   IStateList,
@@ -17,17 +17,21 @@ import {
   TStateOrRaw,
   TSubscribe,
   TSubscribeSwitchParams,
-} from './types';
+} from "./types";
 
-export const stateList = <Type>(data: TStateListOrRaw<Type>): IStateList<Type> => {
+export const stateList = <Type>(
+  data: TStateListOrRaw<Type>
+): IStateList<Type> => {
   return StateList.from(data);
 };
 // @ts-ignore
-export const StateList: IStateListProto = class IStateListClass<Type> implements IStateList<Type>, Iterable<IState<Type>> {
+export const StateList: IStateListProto = class IStateListClass<Type>
+  implements IStateList<Type>, Iterable<IState<Type>>
+{
   private list: IState<Type>[] = [];
   private sourceName?: string;
   private new = false;
-  private actionsAllow: TAction[] = ['create', 'update', 'delete'];
+  private actionsAllow: TAction[] = ["create", "update", "delete"];
   private mixinObject: { [key: string]: any } = {};
   private fullList_?: IStateList<Type>;
 
@@ -158,7 +162,10 @@ export const StateList: IStateListProto = class IStateListClass<Type> implements
     }
   }
 
-  onChange(fields: TOnChangeField<Type>, params: TOnChangeProperties<Type>): this {
+  onChange(
+    fields: TOnChangeField<Type>,
+    params: TOnChangeProperties<Type>
+  ): this {
     // Добавляем обработчики для всего списка
     const fieldsArray = Array.isArray(fields) ? fields : [fields];
     for (const field of fieldsArray) {
@@ -224,14 +231,17 @@ export const StateList: IStateListProto = class IStateListClass<Type> implements
     return this.list;
   }
 
-  count(params?: Pick<TStateListIterParams, 'deleted'>): number {
+  count(params?: Pick<TStateListIterParams, "deleted">): number {
     return this.list.reduce((acc, i) => {
       if (!i.isDeleted() || params?.deleted) acc += 1;
       return acc;
     }, 0);
   }
 
-  filter(arg: TCallback<Type>, params: TStateListIterParams = {}): IState<Type>[] {
+  filter(
+    arg: TCallback<Type>,
+    params: TStateListIterParams = {}
+  ): IState<Type>[] {
     const callback = makeCallback(arg);
     const result: IState<Type>[] = [];
     for (const state of this.iter(params)) {
@@ -240,14 +250,20 @@ export const StateList: IStateListProto = class IStateListClass<Type> implements
     return result;
   }
 
-  find(arg: TCallback<Type>, params: TStateListIterParams = {}): IState<Type> | undefined {
+  find(
+    arg: TCallback<Type>,
+    params: TStateListIterParams = {}
+  ): IState<Type> | undefined {
     const callback = makeCallback(arg);
     for (const state of this.iter(params)) {
       if (callback(state)) return state;
     }
   }
 
-  subList(arg: TCallback<Type>, params: TStateListIterParams = {}): IStateList<Type> {
+  subList(
+    arg: TCallback<Type>,
+    params: TStateListIterParams = {}
+  ): IStateList<Type> {
     const callback = makeCallback(arg);
     const items = this.filter(callback, params);
     return new StateList(items).fullList(this);

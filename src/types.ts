@@ -5,7 +5,9 @@ export interface IState<Type> {
   /** Возвращает значение по ключу */
   get<F extends keyof Type, V extends Type[F]>(field: F): V;
   /** Возвращает объект ключ значение из указанных ключей */
-  mget<F extends keyof Type, V extends Type[F]>(...fields: F[]): { [key in F]: V };
+  mget<F extends keyof Type, V extends Type[F]>(
+    ...fields: F[]
+  ): { [key in F]: V };
   /** Устанавливает набор ключ/значение. Возвращает булево значение если состояние было изменено */
   mset<F extends keyof Type, V extends Type[F]>(data: any): boolean;
   /** Есть ли изменения */
@@ -15,7 +17,10 @@ export interface IState<Type> {
   /** Подписка на создание */
   onCreate(params: TOnChangeProperties<Type>): this;
   /** Подписка на изменение свойства */
-  onChange(fields: TOnChangeField<Type>, params: TOnChangeProperties<Type>): this;
+  onChange(
+    fields: TOnChangeField<Type>,
+    params: TOnChangeProperties<Type>
+  ): this;
   /** Подписка на удаление */
   onDelete(params: TOnChangeProperties<Type>): this;
   /** Отключает/включает обработчики событий onCreate, onChange, onDelete */
@@ -57,7 +62,10 @@ export interface IState<Type> {
   /** Возвращает информацию сохраненную в mixin */
   getMixin(): any | undefined;
   /** Поиск разницы в объектах */
-  diff(item: any, options?: { skipNew?: boolean; skipOld?: boolean; skip?: string[] }): TDiffProperties;
+  diff(
+    item: any,
+    options?: { skipNew?: boolean; skipOld?: boolean; skip?: string[] }
+  ): TDiffProperties;
 }
 
 export interface IStateProto {
@@ -88,7 +96,7 @@ export interface IStateList<Type> {
   /** Возвращает список состояний */
   getList(): IState<Type>[];
   /** Возвращает количество элементов в коллекции, пропуская удаленные позиции */
-  count(params?: Pick<TStateListIterParams, 'deleted'>): number;
+  count(params?: Pick<TStateListIterParams, "deleted">): number;
   /** Есть ли изменения */
   hasChanges(): boolean;
   /** Возвращает изменения по списку сущностей */
@@ -100,7 +108,10 @@ export interface IStateList<Type> {
   /** Подписка на создание */
   onCreate(params: TOnChangeProperties<Type>): this;
   /** Подписка на изменение свойства */
-  onChange(fields: TOnChangeField<Type>, params: TOnChangeProperties<Type>): this;
+  onChange(
+    fields: TOnChangeField<Type>,
+    params: TOnChangeProperties<Type>
+  ): this;
   /** Подписка на удаление */
   onDelete(params: TOnChangeProperties<Type>): this;
   /** Очищает подписки */
@@ -116,11 +127,17 @@ export interface IStateList<Type> {
   /** Возвращает информацию сохраненную в mixin */
   getMixin(): any | undefined;
   /** Поиск элемента */
-  find(arg: TCallback<Type>, params?: TStateListIterParams): IState<Type> | undefined;
+  find(
+    arg: TCallback<Type>,
+    params?: TStateListIterParams
+  ): IState<Type> | undefined;
   /** Фильтрация списка */
   filter(arg: TCallback<Type>, params?: TStateListIterParams): IState<Type>[];
   /** Возвращает подмножество связанное с основным */
-  subList(arg: TCallback<Type>, params?: TStateListIterParams): IStateList<Type>;
+  subList(
+    arg: TCallback<Type>,
+    params?: TStateListIterParams
+  ): IStateList<Type>;
   /** Функция аналогичная map в Array */
   map<R>(callback: TMapCallback<Type, R>, params?: TStateListIterParams): R[];
 }
@@ -157,7 +174,11 @@ export type TStateListOrRaw<Type> = Type[] | IState<Type>[] | IStateList<Type>;
 export type TStateListIterParams = { deleted?: true; reverse?: boolean };
 export type TCallback<Type> = TCallbackBoolean<Type> | Partial<Type>;
 export type TCallbackBoolean<Type> = (arg: IState<Type>) => boolean;
-export type TMapCallback<Type, R> = (item: IState<Type>, index?: number, array?: IStateList<Type>) => R;
+export type TMapCallback<Type, R> = (
+  item: IState<Type>,
+  index?: number,
+  array?: IStateList<Type>
+) => R;
 
 /** Изменение */
 export type TChange<Type> = {
@@ -172,8 +193,8 @@ export type TChange<Type> = {
   settings?: TChangeOptions;
 };
 /** Виды действий которые были произведены над состоянием */
-export type TAction = 'create' | 'update' | 'delete';
-export const actionsAll: TAction[] = ['create', 'update', 'delete'];
+export type TAction = "create" | "update" | "delete";
+export const actionsAll: TAction[] = ["create", "update", "delete"];
 export type TSubscribeSwitchValue = {
   create: boolean;
   update: boolean;
@@ -193,7 +214,9 @@ export type TSettings = {
   optimizeCreateDelete: boolean;
 };
 
-export type ArrayProperties<T, I> = { [K in keyof T]: T[K] extends Array<I> ? K : never }[keyof T];
+export type ArrayProperties<T, I> = {
+  [K in keyof T]: T[K] extends Array<I> ? K : never;
+}[keyof T];
 export type TDiffProperties = { [key: string]: { f: any; s: any } };
 export type TDiffOptions = {
   /** Пропустить новые свойства */
@@ -206,12 +229,17 @@ export type TDiffOptions = {
 
 export type TOnChangeField<Type> = (keyof Type)[] | keyof Type;
 // TODO[lad]: Убрать any из TOnChangeCallback
-export type TOnChangeCallback<Type> = (params: { initial: any; current: any }, state: IState<Type>) => void;
+export type TOnChangeCallback<Type> = (
+  params: { initial: any; current: any },
+  state: IState<Type>
+) => void;
 export type TOnChangeProperties<Type> = {
   do?: TOnChangeCallback<Type>;
   rollback?: TOnChangeCallback<Type>;
 };
-export type TOnChangeMap<Type> = { [key in keyof Type | any]: TOnChangeProperties<Type>[] };
+export type TOnChangeMap<Type> = {
+  [key in keyof Type | any]: TOnChangeProperties<Type>[];
+};
 export type TSubscribe<Type> = {
   create: TOnChangeProperties<Type>[];
   update: TOnChangeMap<Type>;

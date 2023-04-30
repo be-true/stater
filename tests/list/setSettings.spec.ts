@@ -1,9 +1,9 @@
-import { State, StateList, TSettings } from '../../src';
+import { State, StateList, TSettings } from "../../src";
 
-describe('StateList#setSettings', () => {
-  it('Проверка что значение передано', () => {
-    const data = { name: 'Евгений' };
-    const data2 = { name: 'Татьяна' };
+describe("StateList#setSettings", () => {
+  it("Проверка что значение передано", () => {
+    const data = { name: "Евгений" };
+    const data2 = { name: "Татьяна" };
     const state = new State<typeof data>(data);
     const state2 = new State<typeof data>(data2);
     const list = new StateList<typeof data>([state]);

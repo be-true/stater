@@ -1,4 +1,4 @@
-import { isObject } from './isObject';
+import { isObject } from "./isObject";
 
 /** Глубокое сравнение объектов и массивов */
 export const deepEqual = (first: any, second: any): boolean => {
@@ -23,6 +23,7 @@ export const deepEqual = (first: any, second: any): boolean => {
       return deepEqual(value, sSorted[i]);
     });
   }
-  if (first instanceof Date && second instanceof Date) return first.getTime() === second.getTime();
+  if (first instanceof Date && second instanceof Date)
+    return first.getTime() === second.getTime();
   return first === second;
 };

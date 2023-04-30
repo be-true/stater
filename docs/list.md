@@ -4,7 +4,8 @@
 
 # StateList
 
-обертка над массивом из `State`. Создана для: 
+обертка над массивом из `State`. Создана для:
+
 - Пакетной работы над массивом `State`-ов. Многие методы пробрасываются на выполнение в `State`, такие как `asNew()`, `source('any_source')`...
 - Содержит в себе `итератор`, который позволяет его добавлять в цикл `for of`
 - Исключение `удаленных элементов` при проходе в цикле.
@@ -26,7 +27,7 @@ const stateItems = StateList.from(items);
 ```
 
 ## Методы описывающие мета информацию о списке состояний
- 
+
 `source`(name: string): this;
 
 Итератор по изменениям
@@ -54,8 +55,8 @@ const stateItems = StateList.from(items);
 `isNew`(): boolean;
 
 Возвращает состояние объекта новый или нет
-## Методы для итерации по списку состояний
 
+## Методы для итерации по списку состояний
 
 `iter`(params?: TStateListIterParams): Generator<IState<Type>>;
 
@@ -82,4 +83,3 @@ const stateItems = StateList.from(items);
 `getChangesIter`(): Iterable<TChange<Type>;
 
 Итератор по изменениям
-

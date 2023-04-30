@@ -1,8 +1,12 @@
 type TSubscribeClearAvailable = { subscribeClear: () => void };
-type TSubscribeClearAvailableItem = TSubscribeClearAvailable | TSubscribeClearAvailable[];
+type TSubscribeClearAvailableItem =
+  | TSubscribeClearAvailable
+  | TSubscribeClearAvailable[];
 
 /** Отменяет подписку на все события для всех переданных состояний */
-export const subscribeClear = (states: TSubscribeClearAvailableItem | TSubscribeClearAvailableItem[]) => {
+export const subscribeClear = (
+  states: TSubscribeClearAvailableItem | TSubscribeClearAvailableItem[]
+) => {
   const statesArray = Array.isArray(states) ? states : [states];
 
   for (const state of statesArray) {

@@ -13,8 +13,8 @@ import {
   TSubscribeSwitchValue,
   TSubscribeSwitchParams,
   TSettings,
-} from './types';
-import { deepEqual } from './functions/deepEqual';
+} from "./types";
+import { deepEqual } from "./functions/deepEqual";
 
 export const state = <Type>(data: TStateOrRaw<Type>): IState<Type> => {
   return State.from(data);
@@ -24,7 +24,9 @@ const SETTINGS: TSettings = {
   optimizeCreateDelete: true,
 };
 
-export const State: IStateProto = class StateClass<Type> implements IState<Type> {
+export const State: IStateProto = class StateClass<Type>
+  implements IState<Type>
+{
   private old: any = {};
   private sourceName: string | undefined;
   private options?: TChangeOptions;
@@ -33,7 +35,7 @@ export const State: IStateProto = class StateClass<Type> implements IState<Type>
   private changed = false;
   private deleted = false;
 
-  private actionsAllow: TAction[] = ['create', 'update', 'delete'];
+  private actionsAllow: TAction[] = ["create", "update", "delete"];
   private mixinObject = {};
   private subscribe: TSubscribe<Type> = {
     create: [],
@@ -77,7 +79,10 @@ export const State: IStateProto = class StateClass<Type> implements IState<Type>
     return this;
   }
 
-  onChange(fields: TOnChangeField<Type>, params: TOnChangeProperties<Type>): this {
+  onChange(
+    fields: TOnChangeField<Type>,
+    params: TOnChangeProperties<Type>
+  ): this {
     const fieldsArray = Array.isArray(fields) ? fields : [fields];
     for (const field of fieldsArray) {
       this.subscribe.update[field] ??= [];
@@ -94,7 +99,7 @@ export const State: IStateProto = class StateClass<Type> implements IState<Type>
 
   subscribeSwitch(params: TSubscribeSwitchParams): this {
     let value;
-    if (typeof params === 'boolean') {
+    if (typeof params === "boolean") {
       value = {
         create: params,
         update: params,
@@ -115,10 +120,13 @@ export const State: IStateProto = class StateClass<Type> implements IState<Type>
   }
 
   diff(item: any, options: TDiffOptions): TDiffProperties {
-    if (!!item && item.constructor !== Object) throw new Error('Сравниваемый элемент может быть только объектом');
+    if (!!item && item.constructor !== Object)
+      throw new Error("Сравниваемый элемент может быть только объектом");
 
     const { skipNew, skipOld, skip } = options;
-    const keys = Object.keys({ ...this.data, ...item }).filter((x) => !skip?.includes(x as never));
+    const keys = Object.keys({ ...this.data, ...item }).filter(
+      (x) => !skip?.includes(x as never)
+    );
     const data: TDiffProperties = {};
 
     for (const i in keys) {
@@ -131,15 +139,23 @@ export const State: IStateProto = class StateClass<Type> implements IState<Type>
     }
 
     if (skipOld && skipNew) {
-      return Object.fromEntries(Object.entries(data).filter(([_, value]) => Boolean(value.s) && Boolean(value.f)));
+      return Object.fromEntries(
+        Object.entries(data).filter(
+          ([_, value]) => Boolean(value.s) && Boolean(value.f)
+        )
+      );
     }
 
     if (skipOld) {
-      return Object.fromEntries(Object.entries(data).filter(([_, value]) => Boolean(value.s)));
+      return Object.fromEntries(
+        Object.entries(data).filter(([_, value]) => Boolean(value.s))
+      );
     }
 
     if (skipNew) {
-      return Object.fromEntries(Object.entries(data).filter(([_, value]) => Boolean(value.f)));
+      return Object.fromEntries(
+        Object.entries(data).filter(([_, value]) => Boolean(value.f))
+      );
     }
 
     return data;
@@ -247,7 +263,9 @@ export const State: IStateProto = class StateClass<Type> implements IState<Type>
     return this.data[field] as V;
   }
 
-  mget<F extends keyof Type, V extends Type[F]>(...fields: F[]): { [key in F]: V } {
+  mget<F extends keyof Type, V extends Type[F]>(
+    ...fields: F[]
+  ): { [key in F]: V } {
     //@ts-ignore
     const result: { [key in F]: V } = {};
     for (const field of fields) {
@@ -267,7 +285,8 @@ export const State: IStateProto = class StateClass<Type> implements IState<Type>
   hasChanges<F extends keyof Type>(fields?: F[]): boolean {
     let changed = this.changed;
     for (const field of fields ?? []) {
-      if (!this.old[field] || this.data[field] === this.old[field]) changed = false;
+      if (!this.old[field] || this.data[field] === this.old[field])
+        changed = false;
     }
     // Если нет ни одного признака по изменению, то нет изменения
     if (!this.new && !changed && !this.deleted) return false;
@@ -276,24 +295,29 @@ export const State: IStateProto = class StateClass<Type> implements IState<Type>
     // - что она новая,
     // - и в настройках указана оптимизация для этого
     // то события по изменению нет
-    if (this.new && this.deleted && this.getSettings().optimizeCreateDelete) return false;
+    if (this.new && this.deleted && this.getSettings().optimizeCreateDelete)
+      return false;
 
     return true;
   }
 
   getChange(): TChange<Type> | undefined {
     //  Если не вызвали метод source(name), то ошибка
-    if (this.sourceName === undefined) throw new Error('Необходимо вызвать метод source(name) перед вызовом метода getChange()');
+    if (this.sourceName === undefined)
+      throw new Error(
+        "Необходимо вызвать метод source(name) перед вызовом метода getChange()"
+      );
     if (!this.hasChanges()) return;
 
-    let action: TAction = 'update';
-    if (this.new) action = 'create';
-    if (this.deleted) action = 'delete';
+    let action: TAction = "update";
+    if (this.new) action = "create";
+    if (this.deleted) action = "delete";
 
     if (!this.actionsAllow.includes(action)) return undefined;
 
     let params = this.data;
-    if (Object.keys(this.mixinObject).length) params = { ...params, ...this.mixinObject };
+    if (Object.keys(this.mixinObject).length)
+      params = { ...params, ...this.mixinObject };
 
     const result: TChange<Type> = {
       action: action as TAction,
@@ -308,7 +332,7 @@ export const State: IStateProto = class StateClass<Type> implements IState<Type>
   private handleChange<F extends keyof Type>(field: F, rollback = false): void {
     if (!this.subscribeSwitchValue.update) return;
     const { initial, current } = this.getStateInitialCurrent();
-    const action = rollback ? 'rollback' : 'do';
+    const action = rollback ? "rollback" : "do";
     for (const subscribe of this.subscribe.update[field] ?? []) {
       const callback = subscribe[action];
       if (callback !== undefined) callback({ initial, current }, this);
@@ -318,7 +342,7 @@ export const State: IStateProto = class StateClass<Type> implements IState<Type>
   private handleCreate<F extends keyof Type>(rollback = false): void {
     if (!this.subscribeSwitchValue.create) return;
     const { initial, current } = this.getStateInitialCurrent();
-    const action = rollback ? 'rollback' : 'do';
+    const action = rollback ? "rollback" : "do";
     for (const subscribe of this.subscribe.create ?? []) {
       const callback = subscribe[action];
       if (callback !== undefined) callback({ initial, current }, this);
@@ -328,7 +352,7 @@ export const State: IStateProto = class StateClass<Type> implements IState<Type>
   private handleDelete<F extends keyof Type>(rollback = false): void {
     if (!this.subscribeSwitchValue.delete) return;
     const { initial, current } = this.getStateInitialCurrent();
-    const action = rollback ? 'rollback' : 'do';
+    const action = rollback ? "rollback" : "do";
     for (const subscribe of this.subscribe.delete ?? []) {
       const callback = subscribe[action];
       if (callback !== undefined) callback({ initial, current }, this);

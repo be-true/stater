@@ -1,4 +1,4 @@
-export { compose } from './compose';
-export { State, state } from './state';
-export { StateList, stateList } from './list';
-export * from './types';
+export { compose } from "./compose";
+export { State, state } from "./state";
+export { StateList, stateList } from "./list";
+export * from "./types";

@@ -1,8 +1,8 @@
-import { State } from '../../src';
+import { State } from "../../src";
 
-describe('State.onCreate()', () => {
-  it('Вызывается после вызова asNew()', () => {
-    const data = { name: 'Eugen' };
+describe("State.onCreate()", () => {
+  it("Вызывается после вызова asNew()", () => {
+    const data = { name: "Eugen" };
     const state = new State<typeof data>(data);
     let doInitialSet = {};
     state.onCreate({ do: (params) => (doInitialSet = params.initial) });
@@ -10,8 +10,8 @@ describe('State.onCreate()', () => {
     expect(doInitialSet).toEqual(data);
   });
 
-  it('Вызывается сразу при добавлении обработчика, так как state уже имеет состояние новый', () => {
-    const data = { name: 'Eugen' };
+  it("Вызывается сразу при добавлении обработчика, так как state уже имеет состояние новый", () => {
+    const data = { name: "Eugen" };
     const state = new State<typeof data>(data);
     let doInitialSet = {};
     state.asNew();
@@ -19,8 +19,8 @@ describe('State.onCreate()', () => {
     expect(doInitialSet).toEqual(data);
   });
 
-  it('Вызывается обратное событие при отмене asNew()', () => {
-    const data = { name: 'Eugen' };
+  it("Вызывается обратное событие при отмене asNew()", () => {
+    const data = { name: "Eugen" };
     const state = new State<typeof data>(data);
     let doInitialSet = {};
     let rollbackInitialSet = {};

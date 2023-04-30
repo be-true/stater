@@ -1,8 +1,8 @@
-import { State } from '../../src';
+import { State } from "../../src";
 
-describe('State.clearSubscribe()', () => {
-  it('Очистка всех подписок', () => {
-    const data = { name: 'User', age: 90 };
+describe("State.clearSubscribe()", () => {
+  it("Очистка всех подписок", () => {
+    const data = { name: "User", age: 90 };
     const state = new State<typeof data>(data);
 
     // Очищаем подписки

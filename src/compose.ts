@@ -1,6 +1,15 @@
-import { StateList } from './list';
-import { State } from './state';
-import { actionsAll, IStateCompose, TChange, TChangesBatchParams, TChangesParams, TSettings, TStateAny, TSubscribeSwitchParams } from './types';
+import { StateList } from "./list";
+import { State } from "./state";
+import {
+  actionsAll,
+  IStateCompose,
+  TChange,
+  TChangesBatchParams,
+  TChangesParams,
+  TSettings,
+  TStateAny,
+  TSubscribeSwitchParams,
+} from "./types";
 
 export const compose = (...states: TStateAny[]): StateCompose => {
   return new StateCompose(states);
@@ -65,7 +74,8 @@ class StateCompose implements IStateCompose {
       ...(params ?? {}),
     };
 
-    const hasInAction = (change: TChange<any>) => _params.actions.includes(change.action);
+    const hasInAction = (change: TChange<any>) =>
+      _params.actions.includes(change.action);
 
     for (const state of this.states) {
       if (state instanceof State) {

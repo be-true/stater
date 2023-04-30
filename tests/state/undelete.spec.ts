@@ -1,9 +1,9 @@
-import { State } from '../../src';
+import { State } from "../../src";
 
-describe('State#undelete', () => {
-  it('Снятие пометки об удалении', () => {
-    const data = { name: 'Eugen' };
-    const state = new State<typeof data>(data).source('any');
+describe("State#undelete", () => {
+  it("Снятие пометки об удалении", () => {
+    const data = { name: "Eugen" };
+    const state = new State<typeof data>(data).source("any");
     state.delete();
     state.undelete();
     const result = state.getChange();

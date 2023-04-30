@@ -9,7 +9,7 @@
 ## Создание
 
 ```javascript
-import { stateCompose, stateList, stateItem } from 'stater';
+import { stateCompose, stateList, stateItem } from "stater";
 
 const stateItem = stateItem(item);
 const stateItems = stateList(items);
@@ -40,4 +40,3 @@ const composed = stateCompose(stateItem, stateItems);
 `getChangesBatch`(size?: number): Iterable<TChange<any>[]>
 
 Итератор по изменениям пакетно
-
